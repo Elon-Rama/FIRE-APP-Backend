@@ -50,7 +50,7 @@ const emergencySchema = new mongoose.Schema({
           type: {
             type: String,
             enum: ["savings", "withdraw"],
-            required: true,
+            required: false,
           },
         },
       ],
@@ -61,6 +61,6 @@ const emergencySchema = new mongoose.Schema({
     required: false,
     default: 0,
   },
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model("EmergencyFund", emergencySchema);

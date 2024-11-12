@@ -9,6 +9,7 @@ const childRoute = require("./Router/childRoute");
 const allocationRoute = require("./Router/allocationRoute");
 const budgetRoute = require("./Router/budgetRoute");
 const emergencyRoute = require('./Router/emergencyRoute');
+const insuranceRoute = require('./Router/insuranceRoute');
 
 api.use('/user',emailRoute);
 api.use('/profile',userRoute);
@@ -18,5 +19,6 @@ api.use('/child',childRoute);
 api.use('/allocation',allocationRoute);
 api.use('/budget',budgetRoute);
 api.use('/emergency',emergencyRoute);
+api.use('/insurance',insuranceRoute);
 
 module.exports = api;

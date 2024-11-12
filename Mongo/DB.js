@@ -1,1 +1,1 @@
-module.exports = {'url':'mongodb://localhost:27017/FIRE-APP'}
+module.exports = {'url':'mongodb://localhost:27017/FIRE'}
