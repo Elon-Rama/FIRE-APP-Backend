@@ -5,9 +5,9 @@ const doc = {
     title: "Financial Independence Retire-Early",
     description: "Version 1.0"
   },
-  host: "localhost:7000",  
+  host: "fire-app-backend.onrender.com",  
   basePath: "/",
-  schemes: ["http"],  
+  schemes: ["https"], 
 };
 
 const outputFile = "./swagger-output.json";
