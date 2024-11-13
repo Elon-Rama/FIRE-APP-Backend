@@ -1,6 +1,7 @@
 const budgetService = require('../../Service/ExpensesAllocation/budgetService');
 
 exports.Create = async (req, res) => {
+  //#swagger.tags = ['Budgetplan-income']
   try {
     const budgetData = req.body;
     const createdBudget = await budgetService.createBudget(budgetData);
@@ -17,6 +18,7 @@ exports.Create = async (req, res) => {
 };
 
 exports.update = async (req, res) => {
+  //#swagger.tags = ['Budgetplan-income']
   try {
     const { id } = req.params;
     const budgetData = req.body;
@@ -34,6 +36,7 @@ exports.update = async (req, res) => {
 };
 
 exports.getById = async (req, res) => {
+  //#swagger.tags = ['Budgetplan-income']
   try {
     const { id } = req.params;
     const budget = await budgetService.getBudgetById(id);
@@ -50,6 +53,7 @@ exports.getById = async (req, res) => {
 };
 
 exports.calculateBudget = async (req, res) => {
+  //#swagger.tags = ['Budgetplan-income']
   try {
     const { month, year, userId } = req.query;
     const budgetCalculation = await budgetService.calculateBudget(month, year, userId);

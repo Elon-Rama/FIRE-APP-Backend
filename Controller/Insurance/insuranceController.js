@@ -1,6 +1,7 @@
 const insuranceService = require("../../Service/Insurance/insuranceService");
 
 exports.createInsurance = (req, res) => {
+  //#swagger.tags = ['Insurance']
   const insuranceData = req.body;
 
   insuranceService
@@ -19,6 +20,7 @@ exports.createInsurance = (req, res) => {
 };
 
 exports.updateInsurance = (req, res) => {
+  //#swagger.tags = ['Insurance']
   const insuranceId = req.params.id;
   const updateData = req.body;
 
@@ -38,6 +40,7 @@ exports.updateInsurance = (req, res) => {
 };
 
 exports.getInsuranceById = (req, res) => {
+  //#swagger.tags = ['Insurance']
   const insuranceId = req.params.id;
 
   insuranceService
@@ -46,7 +49,7 @@ exports.getInsuranceById = (req, res) => {
       if (!insurance) {
         return res.status(404).json({ message: "Insurance not found" });
       }
-    //   res.status(200).json(insurance);
+    
     res.status(200).json({
         message : "Insurance id retrived successfully",
         data : insurance,
@@ -60,6 +63,7 @@ exports.getInsuranceById = (req, res) => {
 };
 
 exports.getAllInsurances = (req, res) => {
+  //#swagger.tags = ['Insurance']
   insuranceService
     .getAllInsurances()
     .then((insurances) => {
@@ -77,6 +81,7 @@ exports.getAllInsurances = (req, res) => {
 };
 
 exports.deleteInsurance = (req, res) => {
+  //#swagger.tags = ['Insurance']
   const insuranceId = req.params.id;
 
   insuranceService

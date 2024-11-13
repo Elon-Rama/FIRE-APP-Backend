@@ -1,6 +1,7 @@
 const childExpensesService = require("../../Service/Category/childService");
 
 exports.upsert = async (req, res) => {
+   //#swagger.tags = ['Child-Expenses']
   const { expensesId, category, userId } = req.body;
 
   try {
@@ -19,6 +20,7 @@ exports.upsert = async (req, res) => {
 };
 
 exports.getAll = async (req, res) => {
+  //#swagger.tags = ['Child-Expenses']
   const { userId } = req.query;
 
   try {
@@ -33,6 +35,7 @@ exports.getAll = async (req, res) => {
 };
 
 exports.getChildByMaster = async (req, res) => {
+  //#swagger.tags = ['Child-Expenses']
   const { userId, title } = req.body;
 
   try {
@@ -47,6 +50,7 @@ exports.getChildByMaster = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
+  //#swagger.tags = ['Child-Expenses']
   const { id } = req.params;
 
   try {
@@ -61,6 +65,7 @@ exports.delete = async (req, res) => {
 };
 
 exports.search = async (req, res) => {
+  //#swagger.tags = ['Child-Expenses']
   const searchTerm = req.query.searchTerm;
 
   try {

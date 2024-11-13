@@ -1,7 +1,7 @@
 const emailService = require("../../Service/Login/emailService");
 
 exports.signIn = (req, res) => {
-  //#swagger.tags = ['Login']
+  //#swagger.tags = ['Login-User']
   const { email } = req.body;
 
   if (!email) {
@@ -42,7 +42,7 @@ exports.verifyOTP = (req, res) => {
 };
 
 exports.logout = (req, res) => {
-  //#swagger.tags = ['Login']
+  //#swagger.tags = ['Login-User']
   const { userId } = req.body;
 
   if (!userId) {
@@ -62,7 +62,7 @@ exports.logout = (req, res) => {
 
 // Validate Token
 exports.validateToken = (req, res) => {
-  //#swagger.tags = ['Login']
+  //#swagger.tags = ['Login-User']
   const { email, token } = req.body;
 
   if (!email || !token) {
@@ -82,7 +82,7 @@ exports.validateToken = (req, res) => {
 
 // Check Session
 exports.checkSession = (req, res) => {
-  //#swagger.tags = ['Login']
+  //#swagger.tags = ['Login-User']
   const { sessionId } = req.body;
 
   if (!sessionId) {
@@ -102,7 +102,7 @@ exports.checkSession = (req, res) => {
 
 // Refresh Token
 exports.refreshToken = (req, res) => {
-  //#swagger.tags = ['Login']
+ //#swagger.tags = ['Login-User']
   const { token } = req.body;
 
   if (!token) {
