@@ -24,7 +24,7 @@
     "/api/user/signin": {
       "post": {
         "tags": [
-          "Login"
+          "Login-User"
         ],
         "description": "",
         "parameters": [
@@ -93,7 +93,7 @@
     "/api/user/logout": {
       "post": {
         "tags": [
-          "Login"
+          "Login-User"
         ],
         "description": "",
         "parameters": [
@@ -126,7 +126,7 @@
     "/api/user/validate-token": {
       "post": {
         "tags": [
-          "Login"
+          "Login-User"
         ],
         "description": "",
         "parameters": [
@@ -162,7 +162,7 @@
     "/api/user/check-session": {
       "post": {
         "tags": [
-          "Login"
+          "Login-User"
         ],
         "description": "",
         "parameters": [
@@ -195,7 +195,7 @@
     "/api/user/refresh-token": {
       "post": {
         "tags": [
-          "Login"
+          "Login-User"
         ],
         "description": "",
         "parameters": [
@@ -227,6 +227,9 @@
     },
     "/api/profile/create": {
       "post": {
+        "tags": [
+          "User-Profile"
+        ],
         "description": "",
         "parameters": [
           {
@@ -269,6 +272,9 @@
     },
     "/api/profile/getById/{profile_id}": {
       "get": {
+        "tags": [
+          "User-Profile"
+        ],
         "description": "",
         "parameters": [
           {
@@ -298,6 +304,9 @@
     },
     "/api/profile/delete/{profile_id}": {
       "delete": {
+        "tags": [
+          "User-Profile"
+        ],
         "description": "",
         "parameters": [
           {
@@ -327,6 +336,9 @@
     },
     "/api/profile/getAll": {
       "get": {
+        "tags": [
+          "User-Profile"
+        ],
         "description": "",
         "parameters": [
           {
@@ -350,6 +362,9 @@
     },
     "/api/profile/update/{profile_id}": {
       "put": {
+        "tags": [
+          "User-Profile"
+        ],
         "description": "",
         "parameters": [
           {
@@ -379,6 +394,9 @@
     },
     "/api/fire/create": {
       "post": {
+        "tags": [
+          "Questionpage-FIRE"
+        ],
         "description": "",
         "parameters": [
           {
@@ -402,6 +420,9 @@
     },
     "/api/fire/calculate/{fireId}": {
       "get": {
+        "tags": [
+          "Questionpage-FIRE"
+        ],
         "description": "",
         "parameters": [
           {
@@ -428,8 +449,16 @@
     },
     "/api/master/create": {
       "post": {
+        "tags": [
+          "Master-Expenses"
+        ],
         "description": "",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "body",
             "in": "body",
@@ -453,6 +482,9 @@
           "200": {
             "description": "OK"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -461,8 +493,16 @@
     },
     "/api/master/all": {
       "get": {
+        "tags": [
+          "Master-Expenses"
+        ],
         "description": "",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "userId",
             "in": "query",
@@ -473,6 +513,9 @@
           "200": {
             "description": "OK"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -481,6 +524,9 @@
     },
     "/api/master/getbyid/{expenses_id}": {
       "get": {
+        "tags": [
+          "Master-Expenses"
+        ],
         "description": "",
         "parameters": [
           {
@@ -488,11 +534,19 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "500": {
             "description": "Internal Server Error"
@@ -502,6 +556,9 @@
     },
     "/api/master/delete/{expenses_id}": {
       "delete": {
+        "tags": [
+          "Master-Expenses"
+        ],
         "description": "",
         "parameters": [
           {
@@ -509,11 +566,19 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "500": {
             "description": "Internal Server Error"
@@ -523,6 +588,9 @@
     },
     "/api/child/create": {
       "post": {
+        "tags": [
+          "Child-Expenses"
+        ],
         "description": "",
         "parameters": [
           {
@@ -561,6 +629,9 @@
     },
     "/api/child/all": {
       "get": {
+        "tags": [
+          "Child-Expenses"
+        ],
         "description": "",
         "parameters": [
           {
@@ -586,6 +657,9 @@
     },
     "/api/child/getByMasterName": {
       "post": {
+        "tags": [
+          "Child-Expenses"
+        ],
         "description": "",
         "parameters": [
           {
@@ -621,6 +695,9 @@
     },
     "/api/child/delete/{id}": {
       "delete": {
+        "tags": [
+          "Child-Expenses"
+        ],
         "description": "",
         "parameters": [
           {
@@ -647,6 +724,9 @@
     },
     "/api/child/search": {
       "get": {
+        "tags": [
+          "Child-Expenses"
+        ],
         "description": "",
         "parameters": [
           {
@@ -672,8 +752,16 @@
     },
     "/api/allocation/create": {
       "post": {
+        "tags": [
+          "Expenses-Allocation"
+        ],
         "description": "",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "body",
             "in": "body",
@@ -700,6 +788,9 @@
           "201": {
             "description": "Created"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -708,8 +799,16 @@
     },
     "/api/allocation/copyPreviousMonth": {
       "post": {
+        "tags": [
+          "Expenses-Allocation"
+        ],
         "description": "",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "body",
             "in": "body",
@@ -730,6 +829,9 @@
           }
         ],
         "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -739,10 +841,15 @@
     "/api/allocation/subcategorysaveupdate": {
       "post": {
         "tags": [
-          "Expenses Allocation"
+          "Expenses-Allocation"
         ],
         "description": "",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "body",
             "in": "body",
@@ -778,6 +885,9 @@
           "400": {
             "description": "Bad Request"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -787,7 +897,7 @@
     "/api/allocation/delete/{allocationId}": {
       "delete": {
         "tags": [
-          "Expenses Allocation"
+          "Expenses-Allocation"
         ],
         "description": "",
         "parameters": [
@@ -796,11 +906,19 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "404": {
             "description": "Not Found"
@@ -814,10 +932,15 @@
     "/api/allocation/getAll": {
       "post": {
         "tags": [
-          "Expenses Allocation"
+          "Expenses-Allocation"
         ],
         "description": "",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "body",
             "in": "body",
@@ -841,6 +964,9 @@
           "200": {
             "description": "OK"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "404": {
             "description": "Not Found"
           },
@@ -853,7 +979,7 @@
     "/api/allocation/{userId}/{month}/{year}": {
       "get": {
         "tags": [
-          "Expenses Allocation"
+          "Expenses-Allocation"
         ],
         "description": "",
         "parameters": [
@@ -874,11 +1000,19 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
           }
         ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "404": {
             "description": "Not Found"
@@ -889,8 +1023,52 @@
         }
       }
     },
+    "/api/allocation/edit": {
+      "put": {
+        "tags": [
+          "Expenses-Allocation"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "userId": {
+                  "example": "any"
+                },
+                "entryId": {
+                  "example": "any"
+                },
+                "amount": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/api/budget/create": {
       "post": {
+        "tags": [
+          "Budgetplan-income"
+        ],
         "description": "",
         "parameters": [
           {
@@ -914,6 +1092,9 @@
     },
     "/api/budget/getById/{id}": {
       "get": {
+        "tags": [
+          "Budgetplan-income"
+        ],
         "description": "",
         "parameters": [
           {
@@ -943,6 +1124,9 @@
     },
     "/api/budget/update/{id}": {
       "put": {
+        "tags": [
+          "Budgetplan-income"
+        ],
         "description": "",
         "parameters": [
           {
@@ -972,6 +1156,9 @@
     },
     "/api/budget/calculate": {
       "get": {
+        "tags": [
+          "Budgetplan-income"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1164,6 +1351,9 @@
     },
     "/api/insurance/create": {
       "post": {
+        "tags": [
+          "Insurance"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -1177,6 +1367,9 @@
     },
     "/api/insurance/update/{id}": {
       "put": {
+        "tags": [
+          "Insurance"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1195,6 +1388,9 @@
     },
     "/api/insurance/getbyid/{id}": {
       "get": {
+        "tags": [
+          "Insurance"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1216,6 +1412,9 @@
     },
     "/api/insurance/getall": {
       "get": {
+        "tags": [
+          "Insurance"
+        ],
         "description": "",
         "responses": {
           "200": {
@@ -1226,6 +1425,9 @@
     },
     "/api/insurance/delete/{id}": {
       "delete": {
+        "tags": [
+          "Insurance"
+        ],
         "description": "",
         "parameters": [
           {
