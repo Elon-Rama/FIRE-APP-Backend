@@ -32,8 +32,8 @@ app.use('/api',route)
 
 // MongoDB Connection
 mongoose
-    .connect(process.env.Mongo, { useNewUrlParser: true, useUnifiedTopology: true })
-    // .connect(mongodb.url, { useNewUrlParser: true, useUnifiedTopology: true })
+   // .connect(process.env.Mongo, { useNewUrlParser: true, useUnifiedTopology: true })
+    .connect(mongodb.url, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log("MongoDB connected!");
     })
@@ -47,7 +47,7 @@ app.get("/", (req, res) => {
 });
 
 // Server Start
-const port = process.env.PORT || 7000;
+const port = process.env.PORT || 5000;
 app.listen(port, () => {
     console.log(`Server connected on port ${port}`);
 });
