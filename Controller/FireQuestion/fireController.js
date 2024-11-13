@@ -2,6 +2,7 @@ const FireService = require("../../Service/FireQuestion/fireService");
 const { validationResult } = require("express-validator");
 
 exports.create = async (req, res) => {
+  //#swagger.tags = ['Questionpage-FIRE']
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -20,6 +21,7 @@ exports.create = async (req, res) => {
 };
 
 exports.calculate = async (req, res) => {
+  //#swagger.tags = ['Questionpage-FIRE']
   try {
     const { fireId } = req.params;
     const response = await FireService.calculateRetirement(fireId);

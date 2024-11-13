@@ -1,6 +1,7 @@
 const expensesService = require("../../Service/Category/masterService");
 
 exports.upsert = async (req, res) => {
+  //#swagger.tags = ['Master-Expenses']
   const { userId, title, id } = req.body;
   try {
     const result = await expensesService.upsertExpense(userId, title, id);
@@ -11,6 +12,7 @@ exports.upsert = async (req, res) => {
 };
 
 exports.getAll = async (req, res) => {
+   //#swagger.tags = ['Master-Expenses']
   const { userId } = req.query;
   try {
     const result = await expensesService.getAllExpenses(userId);
@@ -21,6 +23,7 @@ exports.getAll = async (req, res) => {
 };
 
 exports.getById = async (req, res) => {
+   //#swagger.tags = ['Master-Expenses']
   try {
     const result = await expensesService.getExpenseById(req.params.expenses_id);
     res.status(200).json(result);
@@ -36,6 +39,7 @@ exports.getById = async (req, res) => {
 };
 
 exports.deleteById = async (req, res) => {
+   //#swagger.tags = ['Master-Expenses']
   try {
     const result = await expensesService.toggleExpenseStatus(
       req.params.expenses_id

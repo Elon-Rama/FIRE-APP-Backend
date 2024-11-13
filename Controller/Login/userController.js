@@ -1,6 +1,7 @@
 const userService = require("../../Service/Login/userService");
 
 exports.create = (req, res) => {
+  //#swagger.tags = ['User-Profile']
   const { userId, name, dob, gender, contactNumber, interestedInFhir } =
     req.body;
   const profileData = {
@@ -30,6 +31,7 @@ exports.create = (req, res) => {
 };
 
 exports.getById = (req, res) => {
+  //#swagger.tags = ['User-Profile']
   userService
     .getUserProfileById(req.params.profile_id)
     .then((profile) => {
@@ -48,6 +50,7 @@ exports.getById = (req, res) => {
 };
 
 exports.deleteById = (req, res) => {
+  //#swagger.tags = ['User-Profile']
   userService
     .deleteUserProfileById(req.params.profile_id)
     .then(() => {
@@ -65,6 +68,7 @@ exports.deleteById = (req, res) => {
 };
 
 exports.getAll = (req, res) => {
+  //#swagger.tags = ['User-Profile']
   userService
     .getAllUserProfiles()
     .then((profiles) => {
@@ -83,6 +87,7 @@ exports.getAll = (req, res) => {
 };
 
 exports.update = (req, res) => {
+  //#swagger.tags = ['User-Profile']
   const updateData = req.body;
 
   userService

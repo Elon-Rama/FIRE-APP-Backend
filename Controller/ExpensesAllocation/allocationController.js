@@ -1,6 +1,7 @@
 const allocationService = require("../../Service/ExpensesAllocation/allocationService");
 
 exports.upsert = async (req, res) => {
+  //#swagger.tags = ['Expenses-Allocation']
   try {
     const { userId, titles, month, year } = req.body;
     const result = await allocationService.upsertAllocation(
@@ -21,6 +22,7 @@ exports.upsert = async (req, res) => {
 };
 
 exports.copyPreviousMonthData = async (req, res) => {
+  //#swagger.tags = ['Expenses-Allocation']
   try {
     const { userId, month, year } = req.body;
     const response = await allocationService.copyPreviousMonthData(
@@ -39,6 +41,7 @@ exports.copyPreviousMonthData = async (req, res) => {
 };
 
 exports.updateExpenseAmount = async (req, res) => {
+  //#swagger.tags = ['Expenses-Allocation']
   try {
     const { userId, entryId, amount } = req.body;
     const response = await allocationService.updateExpenseAmount(
@@ -57,7 +60,7 @@ exports.updateExpenseAmount = async (req, res) => {
 };
 
 exports.postSubCategoryValues = async (req, res) => {
-  //#swagger.tags = ['Expenses Allocation']
+  //#swagger.tags = ['Expenses-Allocation']
   try {
     const { userId, month, year, selectedMaster, selectedCategory, amount } =
       req.body;
@@ -80,7 +83,7 @@ exports.postSubCategoryValues = async (req, res) => {
 };
 
 exports.getAll = async (req, res) => {
-  //#swagger.tags = ['Expenses Allocation']
+//#swagger.tags = ['Expenses-Allocation']
   const { userId, month, year } = req.body;
   try {
     const result = await allocationService.getAllAllocations(
@@ -99,7 +102,7 @@ exports.getAll = async (req, res) => {
 };
 
 exports.getById = async (req, res) => {
-  //#swagger.tags = ['Expenses Allocation']
+ //#swagger.tags = ['Expenses-Allocation']
   try {
     const { userId, month, year } = req.params;
     const result = await allocationService.getAllocationById(
@@ -118,7 +121,7 @@ exports.getById = async (req, res) => {
 };
 
 exports.delete = async (req, res) => {
-  //#swagger.tags = ['Expenses Allocation']
+//#swagger.tags = ['Expenses-Allocation']
   const { allocationId } = req.params;
   try {
     const result = await allocationService.deleteAllocation(allocationId);
