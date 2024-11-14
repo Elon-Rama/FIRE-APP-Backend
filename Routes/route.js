@@ -10,6 +10,8 @@ const allocationRoute = require("./Router/allocationRoute");
 const budgetRoute = require("./Router/budgetRoute");
 const emergencyRoute = require('./Router/emergencyRoute');
 const insuranceRoute = require('./Router/insuranceRoute');
+const realityExpensesRoute = require('./Router/realityExpensesRoute')
+const budgetIncomeRoute = require('./Router/budgetIncomeRoute')
 
 api.use('/user',emailRoute);
 api.use('/profile',userRoute);
@@ -20,5 +22,7 @@ api.use('/allocation',allocationRoute);
 api.use('/budget',budgetRoute);
 api.use('/emergency',emergencyRoute);
 api.use('/insurance',insuranceRoute);
+api.use('/reality',realityExpensesRoute);
+api.use('/budgetIncome',budgetIncomeRoute)
 
 module.exports = api;
