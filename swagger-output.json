@@ -395,7 +395,7 @@
     "/api/fire/create": {
       "post": {
         "tags": [
-          "Questionpage-FIRE"
+          "Questionpage"
         ],
         "description": "",
         "parameters": [
@@ -421,7 +421,7 @@
     "/api/fire/calculate/{fireId}": {
       "get": {
         "tags": [
-          "Questionpage-FIRE"
+          "Questionpage"
         ],
         "description": "",
         "parameters": [
