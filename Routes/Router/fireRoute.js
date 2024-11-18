@@ -4,6 +4,6 @@ const {verifyToken} = require('../../Middleware/authMiddleware')
 const FireQuestion = require("../../Controller/FireQuestion/fireController");
 
 router.post("/create", verifyToken, FireQuestion.create);
-router.get('/calculate/:fireId/calculate', verifyToken, FireQuestion.calculate);
+router.get('/calculate/:fireId', verifyToken, FireQuestion.calculate);
 
 module.exports = router;
