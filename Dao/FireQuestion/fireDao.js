@@ -1,7 +1,7 @@
 const FireQuestion = require("../../Models/FireQuestion/fireModel");
 const User = require("../../Models/Login/emailModel");
 
-exports.createFireQuestion = async (data) => {
+exports.create = async (data) => {
   const fireQuestion = new FireQuestion(data);
   return await fireQuestion.save();
 };

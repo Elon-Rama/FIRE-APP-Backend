@@ -1,90 +1,53 @@
-const FireDAO = require("../../Dao/FireQuestion/fireDao");
+const fireDao = require("../../Dao/FireQuestion/fireDao");
 const UserDAO = require("../../Dao/Login/emailDao");
 
+// Helper function to format numbers with commas
 const formatNumberWithCommas = (number) => {
   const numStr = number.toString();
   const [integerPart, decimalPart] = numStr.split(".");
   const lastThreeDigits = integerPart.slice(-3);
   const otherDigits = integerPart
     .slice(0, -3)
-    .replace(/\B(?=(\d{2})+(?!\d))/g, ",");
-  const formattedInteger = otherDigits
-    ? `${otherDigits},${lastThreeDigits}`
-    : lastThreeDigits;
+    .replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Fix this regex to properly format every three digits
+  const formattedInteger = otherDigits ? `${otherDigits},${lastThreeDigits}` : lastThreeDigits;
   return decimalPart ? `${formattedInteger}.${decimalPart}` : formattedInteger;
 };
 
-exports.createFireQuestion = async (data) => {
-  const {
-    userId,
-    occupation,
-    city,
-    age,
-    retireage,
-    expense,
-    inflation,
-    monthlysavings,
-    retirementsavings,
-    prereturn,
-    postreturn,
-    expectancy,
-  } = data;
+exports.create = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      // Checking if the user exists
+      const user = await UserDAO.findUserById({ userId: data.userId });
 
-  const requiredFields = [
-    userId,
-    occupation,
-    city,
-    age,
-    retireage,
-    expense,
-    inflation,
-    monthlysavings,
-    retirementsavings,
-    prereturn,
-    postreturn,
-    expectancy,
-  ];
+      if (!user) {
+        return reject({ error: "User not found" }); // Reject if the user is not found
+      }
 
-  if (requiredFields.includes(undefined)) {
-    return {
-      status: 400,
-      data: {
-        success: false,
-        message: "All fields are required",
-      },
-    };
-  }
+      // Format the numerical fields
+      data.expense = formatNumberWithCommas(data.expense);
+      data.monthlysavings = formatNumberWithCommas(data.monthlysavings);
+      data.retirementsavings = formatNumberWithCommas(data.retirementsavings);
 
-  const existingUser = await UserDAO.findUserById(userId);
-  if (!existingUser) {
-    return {
-      status: 400,
-      data: {
-        success: false,
-        message: "User not found. FireQuestion cannot be created.",
-      },
-    };
-  }
+      // Save the data to the database
+      const response = await fireDao.create(data);
 
-  const fireQuestionData = await FireDAO.createFireQuestion(data);
-
-  fireQuestionData.expense = formatNumberWithCommas(fireQuestionData.expense);
-  fireQuestionData.monthlysavings = formatNumberWithCommas(fireQuestionData.monthlysavings);
-  fireQuestionData.retirementsavings = formatNumberWithCommas(fireQuestionData.retirementsavings);
-
-  return {
-    status: 201,
-    data: {
-      success: true,
-      message: "FireQuestion created successfully",
-      fireId: fireQuestionData._id,
-      fireQuestionData,
-    },
-  };
+      // Resolving the successful response
+      resolve({
+        success: true,
+        message: "FireQuestion created successfully",
+        fireId: response._id,
+        fireQuestionData: response,
+      });
+    } catch (err) {
+      // Rejecting if there's an error during the process
+      reject({ error: err.message || "Failed to create FireQuestion" });
+    }
+  });
 };
 
+
 exports.calculateRetirement = async (fireId) => {
-  const fireQuestionData = await FireDAO.findFireQuestionById(fireId);
+  const fireQuestionData = await fireDao.findFireQuestionById(fireId);
   if (!fireQuestionData) {
     return {
       status: 404,
