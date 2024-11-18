@@ -1,70 +1,181 @@
-const budgetService = require('../../Service/ExpensesAllocation/budgetService');
+const budgetService = require("../../Service/ExpensesAllocation/budgetService");
 
-exports.Create = async (req, res) => {
+exports.create = (req, res) => {
   //#swagger.tags = ['Budgetplan-income']
-  try {
-    const budgetData = req.body;
-    const createdBudget = await budgetService.createBudget(budgetData);
-    return res.status(201).json({
-      message: 'Budget created successfully',
-      budget: createdBudget,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: 'Failed to create budget',
-      error: error.message,
+  const { month, year, income, otherIncome = [], userId } = req.body;
+
+  if (!month || !year || !income || !userId) {
+    return res.status(400).json({
+      success: false,
+      message: "All fields are required",
     });
   }
+  if (!Array.isArray(otherIncome)) {
+    return res.status(400).json({
+      success: false,
+      message: "'otherIncome' should be an array",
+    });
+  }
+
+  const budget = { month, year, income, otherIncome, userId };
+
+  budgetService
+    .create(budget)
+    .then((response) => {
+      res.status(201).json({
+        success: true,
+        message: "Budget created successfully",
+        data: response,
+      });
+    })
+    .catch((error) => {
+      console.error("Error creating budget:", error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to create budget",
+        error: error.message,
+      });
+    });
 };
 
-exports.update = async (req, res) => {
+exports.update = (req, res) => {
   //#swagger.tags = ['Budgetplan-income']
-  try {
-    const { id } = req.params;
-    const budgetData = req.body;
-    const updatedBudget = await budgetService.updateBudget(id, budgetData);
-    return res.status(200).json({
-      message: 'Budget updated successfully',
-      budget: updatedBudget,
+  const { budgetId } = req.params;
+  const budgetData = req.body;
+
+  budgetService
+    .updateBudget(budgetId, budgetData)
+    .then((updatedBudget) => {
+      res.status(200).json({
+        success: true,
+        message: "Budget updated successfully",
+        data: updatedBudget,
+      });
+    })
+    .catch((error) => {
+      console.error("Error updating budget:", error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to update budget",
+        error: error.message,
+      });
     });
-  } catch (error) {
-    return res.status(500).json({
-      message: 'Failed to update budget',
-      error: error.message,
-    });
-  }
 };
 
-exports.getById = async (req, res) => {
+exports.getById = (req, res) => {
   //#swagger.tags = ['Budgetplan-income']
-  try {
-    const { id } = req.params;
-    const budget = await budgetService.getBudgetById(id);
-    return res.status(200).json({
-      message: 'Budget retrieved successfully',
-      budget,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: 'Failed to retrieve budget',
-      error: error.message,
+  const { budgetId } = req.params;
+
+  if (!budgetId) {
+    return res.status(400).json({
+      success: false,
+      message: "BudgetId is required",
     });
   }
+
+  budgetService
+    .getBudgetById(budgetId)
+    .then((response) => {
+      res.status(200).json({
+        success: true,
+        message: "Budget retrieved successfully",
+        data: response,
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to retrieve budget",
+        error: error.message,
+      });
+    });
 };
 
-exports.calculateBudget = async (req, res) => {
+exports.view = (req, res) => {
   //#swagger.tags = ['Budgetplan-income']
-  try {
-    const { month, year, userId } = req.query;
-    const budgetCalculation = await budgetService.calculateBudget(month, year, userId);
-    return res.status(200).json({
-      message: 'Budget calculated successfully',
-      ...budgetCalculation,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: 'Failed to calculate budget',
-      error: error.message,
+  const { month, year, userId } = req.query;
+
+  if (!month || !year || !userId) {
+    return res.status(400).json({
+      success: false,
+      message: "Month, Year, and UserId are required",
     });
   }
+
+  budgetService
+    .View({ month, year, userId })
+    .then((response) => {
+      res.status(200).json({
+        success: true,
+        message: "Budget retrieved successfully",
+        data: response,
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to retrieve budget",
+        error: error.message,
+      });
+    });
+};
+exports.delete = (req, res) => {
+   //#swagger.tags = ['Budgetplan-income']
+  const { budgetId } = req.params;
+
+  if (!budgetId) {
+    return res.status(400).json({
+      success: false,
+      message: "BudgetId is required",
+    });
+  }
+
+  budgetService
+    .deleteBudget(budgetId)
+    .then((response) => {
+      res.status(200).json({
+        success: true,
+        message: response.message,
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to delete budget",
+        error: error.message,
+      });
+    });
+};
+
+exports.calculateBudget = (req, res) => {
+  //#swagger.tags = ['Budgetplan-income']
+  const { month, year, userId } = req.query;
+
+  if (!month || !year || !userId) {
+    return res.status(400).json({
+      success: false,
+      message: "Month, Year, and UserId are required",
+    });
+  }
+
+  budgetService
+    .calculateBudget(month, year, userId)
+    .then((budgetCalculation) => {
+      res.status(200).json({
+        success: true,
+        message: "Budget calculated successfully",
+        data: budgetCalculation,
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({
+        success: false,
+        message: "Failed to calculate budget",
+        error: error.message,
+      });
+    });
 };

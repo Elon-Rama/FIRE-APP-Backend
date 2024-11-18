@@ -9,47 +9,47 @@ const FireQuestionSchema = new mongoose.Schema({
   },
   occupation: {
     type: String,
-    required: true,
+    required: false,
   },
   city: {
     type: String,
-    required: true,
+    required: false,
   },
   age: {
     type: Number,
-    required: true,
+    required: false,
   },
   retireage: {
     type: Number,
-    required: true,
+    required: false,
   },
   expense: {
     type: Number,
-    required: true,
+    required: false,
   },
   inflation: {
     type: Number,
-    required: true,
+    required: false,
   },
   monthlysavings: {
     type: Number,
-    required: true,
+    required: false,
   },
   retirementsavings: {
     type: Number,
-    required: true,
+    required: false,
   },
   prereturn: {
     type: Number,
-    required: true,
+    required: false,
   },
   postreturn: {
     type: Number,
-    required: true,
+    required: false,
   },
   expectancy: {
     type: Number,
-    required: true,
+    required: false,
   },
 
   yearsLeftForRetirement: Number,
