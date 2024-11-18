@@ -7,7 +7,7 @@ exports.createFireQuestion = async (data) => {
 };
 
 exports.findFireQuestionById = async (id) => {
-  return await FireQuestion.findById(id);
+  return await FireQuestion.findById(id); 
 };
 
 exports.updateFireQuestionWithCalculation = async (id, calculationData) => {
