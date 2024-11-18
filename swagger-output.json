@@ -400,11 +400,6 @@
         "description": "",
         "parameters": [
           {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
             "name": "body",
             "in": "body",
             "schema": {
@@ -451,14 +446,11 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "OK"
+          },
           "201": {
             "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
           },
           "500": {
             "description": "Internal Server Error"
@@ -478,16 +470,14 @@
             "in": "path",
             "required": true,
             "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
           }
         ],
         "responses": {
-          "401": {
-            "description": "Unauthorized"
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "500": {
             "description": "Internal Server Error"
@@ -1123,11 +1113,38 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "month": {
+                  "example": "any"
+                },
+                "year": {
+                  "example": "any"
+                },
+                "income": {
+                  "example": "any"
+                },
+                "otherIncome": {
+                  "example": "any"
+                },
+                "userId": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {
           "201": {
             "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"
@@ -1138,7 +1155,7 @@
         }
       }
     },
-    "/api/budget/getById/{id}": {
+    "/api/budget/getById/{budgetId}": {
       "get": {
         "tags": [
           "Budgetplan-income"
@@ -1146,7 +1163,86 @@
         "description": "",
         "parameters": [
           {
-            "name": "id",
+            "name": "budgetId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/budget/view": {
+      "get": {
+        "tags": [
+          "Budgetplan-income"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "month",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "year",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/budget/update/{budgetId}": {
+      "put": {
+        "tags": [
+          "Budgetplan-income"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "budgetId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -1170,15 +1266,15 @@
         }
       }
     },
-    "/api/budget/update/{id}": {
-      "put": {
+    "/api/budget/delete/{budgetId}": {
+      "delete": {
         "tags": [
           "Budgetplan-income"
         ],
         "description": "",
         "parameters": [
           {
-            "name": "id",
+            "name": "budgetId",
             "in": "path",
             "required": true,
             "type": "string"
@@ -1192,6 +1288,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"
@@ -1233,6 +1332,9 @@
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"

@@ -17,7 +17,6 @@ exports.create = async (req, res) => {
     expectancy,
   } = req.body;
 
-  // Validate input fields
   if (
     !userId ||
     !occupation ||
@@ -32,13 +31,12 @@ exports.create = async (req, res) => {
     !postreturn ||
     !expectancy
   ) {
-    return res.status(400).json({
+    return res.status(200).json({
       success: false,
       message: "All fields are required",
     });
   }
 
-  // Prepare the data object
   const data = {
     userId,
     occupation,
@@ -55,32 +53,39 @@ exports.create = async (req, res) => {
   };
 
   try {
-    // Call the service to create fire data
     const response = await fireService.create(data);
 
-    // Send success response
     res.status(201).json(response);
   } catch (error) {
-    // Handle error in the service
     console.error(error);
     res.status(500).json({
       success: false,
-      message: error.message || "Failed to create FireQuestion, please try again",
+      message:
+        error.message || "Failed to create FireQuestion, please try again",
     });
   }
 };
 
-exports.calculate = async (req, res) => {
+exports.calculate = (req, res) => {
   //#swagger.tags = ['Questionpage']
-  try {
-    const { fireId } = req.params;
-    const response = await fireService.calculateRetirement(fireId);
-    res.status(response.status).json(response.data);
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Error calculating retirement",
-      error: error.message,
-    });
+  const { fireId } = req.params;
+
+  if (!fireId) {
+    return res.status(400).json({ error: "fireId not Found" });
   }
+
+  fireService
+    .calculate(fireId)
+    .then((response) => {
+      res.status(200).json(response);
+    })
+    .catch((error) => {
+      console.error(error);
+      res
+        .status(500)
+        .json({
+          error: "Error calculating retirement",
+          details: error.message,
+        });
+    });
 };

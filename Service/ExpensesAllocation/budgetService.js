@@ -2,79 +2,147 @@ const budgetDao = require("../../Dao/ExpensesAllocation/budgetDao");
 const User = require("../../Models/Login/emailModel");
 const ExpensesAllocation = require("../../Models/ExpensesAllocation/allocationModel");
 
-exports.createBudget = async (budgetData) => {
-  const { month, year, userId } = budgetData;
+exports.create = (budgetData) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { month, year, userId, income, otherIncome = [] } = budgetData;
 
-  const user = await User.getUserById(userId);
-  if (!user) throw new Error("User not found");
+      const user = await User.findById(userId);
+      if (!user) {
+        return reject(new Error("User not found"));
+      }
 
-  const existingBudget = await budgetDao.getBudgetByMonthAndYear(
-    userId,
-    month,
-    year
-  );
-  if (existingBudget) {
-    throw new Error("Budget entry already exists for this month and year");
-  }
+      const existingBudget = await budgetDao.getBudgetByMonthAndYear(
+        userId,
+        month,
+        year
+      );
+      if (existingBudget) {
+        return reject(
+          new Error("Budget entry already exists for this month and year")
+        );
+      }
 
-  // Calculate total income
-  const otherIncomeValues = budgetData.otherIncome
-    .slice(0, 10)
-    .concat(Array(10 - budgetData.otherIncome.length).fill(""));
-  const totalOtherIncome = otherIncomeValues.reduce(
-    (acc, curr) => acc + Number(curr),
-    0
-  );
-  const totalIncome = Number(budgetData.income) + totalOtherIncome;
+      const otherIncomeValues = otherIncome
+        .slice(0, 10)
+        .concat(Array(10 - otherIncome.length).fill(0));
+      const totalOtherIncome = otherIncomeValues.reduce(
+        (acc, curr) => acc + Number(curr || 0),
+        0
+      );
+      const totalIncome = Number(income || 0) + totalOtherIncome;
 
-  const newBudget = {
-    ...budgetData,
-    otherIncome: otherIncomeValues,
-    totalIncome,
-  };
+      const newBudget = {
+        ...budgetData,
+        otherIncome: otherIncomeValues,
+        totalIncome,
+      };
 
-  const createdBudget = await budgetDao.createBudget(newBudget);
-  await budgetDao.propagateFutureMonths(createdBudget);
+      const createdBudget = await budgetDao.createBudget(newBudget);
 
-  return createdBudget;
+      await budgetDao.propagateFutureMonths(createdBudget);
+
+      resolve(createdBudget);
+    } catch (error) {
+      console.error("Error in budget creation:", error);
+      reject(new Error("Failed to create budget: " + error.message));
+    }
+  });
 };
 
-exports.updateBudget = async (id, budgetData) => {
-  const existingBudget = await budgetDao.getBudgetById(id);
-  if (!existingBudget) throw new Error("Budget not found");
+exports.updateBudget = (id, budgetData) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const existingBudget = await budgetDao.getBudgetById(id);
+      if (!existingBudget) {
+        return reject(new Error("Budget not found"));
+      }
 
-  const updatedBudget = await budgetDao.updateBudget(id, budgetData);
-  if (budgetData.propagate) {
-    await budgetDao.propagateFutureMonths(updatedBudget);
-  }
+      const updatedBudget = await budgetDao.updateBudget(id, budgetData);
+      if (budgetData.propagate) {
+        await budgetDao.propagateFutureMonths(updatedBudget);
+      }
 
-  return updatedBudget;
+      resolve(updatedBudget);
+    } catch (error) {
+      reject(new Error("Failed to update budget: " + error.message));
+    }
+  });
 };
 
-exports.getBudgetById = async (id) => {
-  const budget = await budgetDao.getBudgetById(id);
-  if (!budget) throw new Error("Budget not found");
-  return budget;
+exports.deleteBudget = (id) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const existingBudget = await budgetDao.getBudgetById(id);
+      if (!existingBudget) {
+        return reject(new Error("Budget not found"));
+      }
+
+      await budgetDao.deleteBudget(id);
+      resolve({ message: "Budget deleted successfully" });
+    } catch (error) {
+      reject(new Error("Failed to delete budget: " + error.message));
+    }
+  });
 };
 
-exports.calculateBudget = async (month, year, userId) => {
-  const budget = await budgetDao.getBudgetByMonthAndYear(userId, month, year);
-  if (!budget)
-    throw new Error("No budget found for the selected month and year");
+exports.getBudgetById = (budgetId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const budget = await budgetDao.getBudgetById(budgetId);
+      if (!budget) {
+        return reject(new Error("Budget not found"));
+      }
 
-  const expensesAllocation = await expensesAllocationDao.getExpensesAllocation(
-    userId,
-    month,
-    year
-  );
-  if (!expensesAllocation)
-    throw new Error(
-      "No expenses allocation found for the selected month and year"
-    );
+      resolve(budget);
+    } catch (error) {
+      reject(new Error("Failed to retrieve budget: " + error.message));
+    }
+  });
+};
 
-  const totalIncome = budget.totalIncome;
-  const totalExpenses = expensesAllocation.totalExpenses;
-  const remainingBalance = totalIncome - totalExpenses;
+exports.View = ({ month, year, userId }) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const budget = await budgetDao.getBudgetByMonthAndYear(
+        userId,
+        month,
+        year
+      );
 
-  return { totalIncome, totalExpenses, remainingBalance };
+      if (!budget) {
+        return reject(
+          new Error("Budget not found for the specified month, year, and user")
+        );
+      }
+
+      resolve(budget);
+    } catch (error) {
+      reject(new Error("Failed to retrieve budget: " + error.message));
+    }
+  });
+};
+
+exports.calculateBudget = (month, year, userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const budget = await budgetDao.getBudgetByMonthAndYear(userId, month, year);
+      if (!budget) {
+        return reject(new Error("No budget found for the selected month and year"));
+      }
+
+      const expensesAllocation = await ExpensesAllocation.getExpensesAllocation(userId, month, year);
+      if (!expensesAllocation) {
+        return reject(new Error("No expenses allocation found for the selected month and year"));
+      }
+
+      const totalIncome = budget.totalIncome;
+      const totalExpenses = expensesAllocation.totalExpenses;
+      const remainingBalance = totalIncome - totalExpenses;
+
+      resolve({ totalIncome, totalExpenses, remainingBalance });
+    } catch (error) {
+      reject(new Error("Failed to calculate budget: " + error.message));
+    }
+  });
 };
