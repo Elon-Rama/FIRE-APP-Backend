@@ -61,7 +61,7 @@ exports.logout = (req, res) => {
 };
 
 // Validate Token
-exports.validateToken = (req, res) => {
+exports.Validate = (req, res) => {
   //#swagger.tags = ['Login-User']
   const { email, token } = req.body;
 
