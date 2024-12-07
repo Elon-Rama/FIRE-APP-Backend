@@ -1,106 +1,126 @@
+const debtDao = require("../../Dao/Debt-Clearance/debtDao");
 const moment = require("moment-timezone");
-const debtDao = require('../../Dao/Debt-Clearance/debtDao');
-const User = require("../../Models/Login/emailModel");
 
-const calculateLoanData = (amount, rateOfInterest, EMI) => {
-  const totalInterest = (amount * rateOfInterest) / 100;
-  const debtAmount = amount + totalInterest;
-  const totalMonths = Math.ceil(debtAmount / EMI);
+exports.createOrUpdateDebt = async (userId, source) => {
+  const currentDateTime = moment.tz("Asia/Kolkata");
+  const currentDate = currentDateTime.format("YYYY-MM-DD");
+  const currentTime = currentDateTime.format("HH:mm:ss");
 
-  const years = Math.floor(totalMonths / 12);
-  const extraMonths = totalMonths % 12;
-  const yearstorepaid = `${years} years ${extraMonths} months`;
+  const enrichedSource = source.map((loan) => {
+    const monthlyInterestRate = loan.interest / 100 / 12;
+    const totalMonths = loan.loanTenure * 12;
 
-  return { debtAmount, yearstorepaid, totalMonths };
-};
+    const emi =
+      (loan.principalAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, totalMonths)) /
+      (Math.pow(1 + monthlyInterestRate, totalMonths) - 1);
 
-const processLoans = async (userId, source) => {
-  // Check if user exists
-  const user = await User.findById(userId);
-  if (!user) throw new Error('User not found');
-
-  // Process loans
-  let totalMonths = 0;
-  const processedLoans = source.map((loan) => {
-    const { debtAmount, yearstorepaid, totalMonths: loanMonths } = calculateLoanData(
-      parseFloat(loan.amount),
-      loan.RateofInterest,
-      loan.EMI
-    );
-
-    totalMonths += loanMonths;
+    const totalPayment = emi * totalMonths;
+    const totalInterestPayment = totalPayment - loan.principalAmount;
+    const outstandingBalance = loan.principalAmount - loan.currentPaid;
 
     return {
       ...loan,
-      amount: parseFloat(loan.amount),
-      debtAmount: debtAmount.toFixed(2),
-      yearstorepaid,
-      RemainingBalance: debtAmount.toFixed(2),
+      emi: Math.round(emi),
+      totalPayment: Math.round(totalPayment),
+      totalInterestPayment: Math.round(totalInterestPayment),
+      outstandingBalance: Math.round(outstandingBalance),
+      date: currentDate,
+      time: currentTime,
+      paymentHistory: [],
     };
   });
 
-  return { processedLoans, totalMonths };
-};
-
-exports.createDebt = async (userId, source) => {
-  const existingDebt = await debtDao.findDebtByUserId(userId);
-
-  let totalMonths = 0;
-  const { processedLoans } = await processLoans(userId, source);
-
-  if (existingDebt) {
-    // Update existing debt
-    existingDebt.source = [...existingDebt.source, ...processedLoans];
-
-    const updatedDebtAmount = existingDebt.source.reduce(
-      (sum, loan) => sum + parseFloat(loan.debtAmount),
-      0
-    );
-
-    const updatedRemainingBalance = existingDebt.source.reduce(
-      (sum, loan) => sum + parseFloat(loan.RemainingBalance),
-      0
-    );
-
-    existingDebt.debtAmount = updatedDebtAmount.toFixed(2);
-    existingDebt.RemainingBalance = updatedRemainingBalance.toFixed(2);
-    await debtDao.updateDebt(existingDebt);
-
-    return existingDebt;
-  } else {
-    // Create new debt record
-    const debtData = { userId, source: processedLoans };
-    const savedDebt = await debtDao.saveDebt(debtData);
-    return savedDebt;
-  }
+  return debtDao.upsertDebt(userId, enrichedSource);
 };
 
 exports.getAllDebts = async (userId) => {
-  const debts = await debtDao.findDebtByUserId(userId);
-  if (!debts) throw new Error('No debt records found for this user');
+  const debt = await debtDao.getDebtByUserId(userId);
+  if (!debt) {
+    throw new Error("No debt clearance records found for the user.");
+  }
 
-  const totalDebt = debts.source.reduce(
-    (sum, loan) => sum + parseFloat(loan.debtAmount),
-    0
-  );
+  let totalDebt = 0,
+    totalInterest = 0,
+    totalPaid = 0,
+    totalOwed = 0;
 
-  const totalMonths = debts.source.reduce(
-    (sum, loan) =>
-      sum +
-      calculateLoanData(parseFloat(loan.amount), loan.RateofInterest, loan.EMI)
-        .totalMonths,
-    0
-  );
+  debt.source.forEach((loan) => {
+    totalDebt += loan.principalAmount;
+    totalInterest += loan.totalInterestPayment;
+    totalPaid += loan.currentPaid;
+    totalOwed += loan.totalPayment - loan.currentPaid;
 
-  const consolidatedYearstorepaid = `${Math.floor(totalMonths / 12)} years ${
-    totalMonths % 12
-  } months`;
+    let currentBalance = loan.principalAmount;
+    loan.paymentHistory.forEach((payment) => {
+      currentBalance -= payment.principalPaid;
+      payment.remainingBalance = Math.max(0, currentBalance);
+    });
+  });
 
   return {
-    ...debts._doc,
-    TotalDebt: totalDebt.toFixed(2),
-    yearstorepaid: consolidatedYearstorepaid,
+    statusCode: "0",
+    message: "Debt clearance records fetched successfully.",
+    userId: debt.userId,
+    debtId: debt._id,
+    data: [
+      {
+        source: debt.source,
+        summary: {
+          TotalDebt: Math.round(totalDebt),
+          TotalInterest: Math.round(totalInterest),
+          TotalPaid: Math.round(totalPaid),
+          TotalOwed: Math.round(totalOwed),
+        },
+      },
+    ],
   };
 };
 
+exports.payEMI = async (userId, loanId, emiPaid) => {
+  const debt = await debtDao.getDebtByUserId(userId);
+  if (!debt) {
+    throw new Error("Debt record not found.");
+  }
 
+  const loan = debt.source.find((loan) => loan._id.toString() === loanId);
+  if (!loan) {
+    throw new Error("Loan not found.");
+  }
+
+  const monthlyInterestRate = loan.interest / 100 / 12;
+  const interestForTheMonth = loan.outstandingBalance * monthlyInterestRate;
+
+  if (emiPaid < interestForTheMonth) {
+    throw new Error("EMI is too low to cover interest.");
+  }
+
+  const principalPaid = emiPaid - interestForTheMonth;
+
+  loan.currentPaid += emiPaid;
+  const currentDateTime = moment.tz("Asia/Kolkata");
+  const currentMonth = currentDateTime.format("YYYY-MM");
+
+  loan.paymentHistory.push({
+    month: currentMonth,
+    emiPaid,
+    principalPaid: Math.round(principalPaid),
+    interestPaid: Math.round(interestForTheMonth),
+    remainingBalance: Math.round(loan.outstandingBalance),
+  });
+
+  loan.outstandingBalance = Math.round(loan.outstandingBalance - principalPaid);
+
+  await debt.save();
+
+  return {
+    message: "EMI payment recorded successfully.",
+    data: {
+      loanId: loan._id,
+      emiPaid,
+      interestPaid: Math.round(interestForTheMonth),
+      principalPaid: Math.round(principalPaid),
+      currentPaid: loan.currentPaid,
+      outstandingBalance: Math.round(loan.outstandingBalance),
+    },
+  };
+};

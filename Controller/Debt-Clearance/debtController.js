@@ -1,68 +1,58 @@
-const debtService = require('../../Service/Debt-Clearance/debtService');
+const debtService = require("../../Service/Debt-Clearance/debtService");
 
 exports.createDebt = async (req, res) => {
   try {
     const { userId, source } = req.body;
+    if (!userId || !source || !Array.isArray(source)) {
+      return res.status(400).json({
+        statusCode: "1",
+        message: "Invalid request data. Please provide a valid userId and source array.",
+      });
+    }
 
-    const result = await debtService.createDebt(userId, source);
-
-    const totalDebt = result.source.reduce(
-      (sum, loan) => sum + parseFloat(loan.debtAmount),
-      0
-    );
-    const totalMonths = result.source.reduce(
-      (sum, loan) =>
-        sum +
-        debtService.calculateLoanData(
-          parseFloat(loan.amount),
-          loan.RateofInterest,
-          loan.EMI
-        ).totalMonths,
-      0
-    );
-
-    const consolidatedYearstorepaid = `${Math.floor(totalMonths / 12)} years ${
-      totalMonths % 12
-    } months`;
-
-    return res.status(200).json({
-      statusCode: "0",
-      message: "Debt data processed successfully",
-      userId,
-      data: {
-        ...result._doc,
-        TotalDebt: totalDebt.toFixed(2),
-        yearstorepaid: consolidatedYearstorepaid,
-      },
-    });
+    const result = await debtService.createOrUpdateDebt(userId, source);
+    res.status(201).json(result);
   } catch (error) {
-    return res.status(500).json({ statusCode: "1", message: error.message });
+    console.error("Error creating/updating debt clearance:", error);
+    res.status(500).json({
+      statusCode: "1",
+      message: "Internal Server Error",
+    });
   }
 };
 
 exports.getAllDebts = async (req, res) => {
   try {
     const { userId } = req.query;
-
     if (!userId) {
       return res.status(400).json({
         statusCode: "1",
-        message: "User ID is required",
+        message: "Invalid request. Please provide a valid userId.",
       });
     }
 
     const result = await debtService.getAllDebts(userId);
-
-    return res.status(200).json({
-      statusCode: "0",
-      message: "Debt records retrieved successfully",
-      userId,
-      data: result,
-    });
+    res.status(200).json(result);
   } catch (error) {
-    return res.status(500).json({
+    console.error("Error fetching debt clearance records:", error);
+    res.status(500).json({
       statusCode: "1",
-      message: error.message,
+      message: "Internal Server Error",
     });
+  }
+};
+
+exports.payEMI = async (req, res) => {
+  try {
+    const { userId, loanId, emiPaid } = req.body;
+    if (!emiPaid) {
+      return res.status(400).json({ message: "EMI amount is required." });
+    }
+
+    const result = await debtService.payEMI(userId, loanId, emiPaid);
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error." });
   }
 };
