@@ -1627,6 +1627,9 @@
     },
     "/api/debt/create": {
       "post": {
+        "tags": [
+          "Debt-Clearance"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1668,6 +1671,9 @@
     },
     "/api/debt/all": {
       "get": {
+        "tags": [
+          "Debt-Clearance"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1699,6 +1705,9 @@
     },
     "/api/debt/payemi": {
       "post": {
+        "tags": [
+          "Debt-Clearance"
+        ],
         "description": "",
         "parameters": [
           {
