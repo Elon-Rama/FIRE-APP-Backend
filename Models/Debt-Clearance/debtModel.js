@@ -1,18 +1,38 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const LoanSchema = new mongoose.Schema({
-    loanName: { type: String, required: true },
-    amount: { type: Number, required: true },
-    RateofInterest: { type: Number, required: true }, 
-    EMI: { type: Number, required: true },
-    debtAmount: { type: Number }, 
-    yearstorepaid: { type: String }, 
-    RemainingBalance: { type: Number } 
+const SourceSchema = new mongoose.Schema({
+  loanName: String,
+  principalAmount: Number,
+  interest: Number,
+  loanTenure: Number,
+  currentPaid: { type: Number, default: 0 },
+  emi: Number,
+  totalPayment: Number,
+  totalInterestPayment: Number,
+  outstandingBalance: Number, 
+  date: String,
+  time: String,
+  paymentHistory: [
+    {
+      month: String, 
+      emiPaid: Number,
+      principalPaid: Number,
+      interestPaid: Number,
+      remainingBalance: Number,
+    },
+  ],
 });
-
-const DebtSchema = new mongoose.Schema({
-    userId: { type: String, required: true },
-    source: [LoanSchema] 
+const DebtClearanceSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User", 
+    required: true,
+  },
+  source: [SourceSchema], 
+  
 });
+const DebtClearance = mongoose.model("DebtClearance", DebtClearanceSchema);
 
-module.exports = mongoose.model('Debt', DebtSchema);
+module.exports = DebtClearance;
+
+
