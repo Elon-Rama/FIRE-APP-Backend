@@ -1,6 +1,7 @@
 const debtService = require("../../Service/Debt-Clearance/debtService");
 
 exports.createDebt = async (req, res) => {
+  //#swagger.tags=['Debt-Clearance']
   try {
     const { userId, source } = req.body;
     if (!userId || !source || !Array.isArray(source)) {
@@ -22,6 +23,7 @@ exports.createDebt = async (req, res) => {
 };
 
 exports.getAllDebts = async (req, res) => {
+  //#swagger.tags=['Debt-Clearance']
   try {
     const { userId } = req.query;
     if (!userId) {
@@ -43,6 +45,7 @@ exports.getAllDebts = async (req, res) => {
 };
 
 exports.payEMI = async (req, res) => {
+  //#swagger.tags=['Debt-Clearance']
   try {
     const { userId, loanId, emiPaid } = req.body;
     if (!emiPaid) {
