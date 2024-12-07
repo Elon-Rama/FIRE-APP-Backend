@@ -1,6 +1,6 @@
 const fireService = require("../../Service/FireQuestion/fireService");
 
-exports.create = async (req, res) => {
+exports.Create = async (req, res) => {
   //#swagger.tags = ['Questionpage']
   const {
     userId,
@@ -66,7 +66,7 @@ exports.create = async (req, res) => {
   }
 };
 
-exports.calculate = (req, res) => {
+exports.Calculate = (req, res) => {
   //#swagger.tags = ['Questionpage']
   const { fireId } = req.params;
 
