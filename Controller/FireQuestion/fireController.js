@@ -4,8 +4,8 @@ exports.Create = async (req, res) => {
   //#swagger.tags = ['Questionpage']
   const {
     userId,
-    occupation,
-    city,
+    // occupation,
+    // city,
     age,
     retireage,
     expense,
@@ -19,8 +19,8 @@ exports.Create = async (req, res) => {
 
   if (
     !userId ||
-    !occupation ||
-    !city ||
+    // !occupation ||
+    // !city ||
     !age ||
     !retireage ||
     !expense ||
@@ -39,8 +39,8 @@ exports.Create = async (req, res) => {
 
   const data = {
     userId,
-    occupation,
-    city,
+    // occupation,
+    // city,
     age,
     retireage,
     expense,

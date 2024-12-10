@@ -2,15 +2,27 @@ const userService = require("../../Service/Login/userService");
 
 exports.create = (req, res) => {
   //#swagger.tags = ['User-Profile']
-  const { userId, name, dob, gender, contactNumber, interestedInFhir } =
-    req.body;
+  const {
+    userId,
+    name,
+    dob,
+    gender,
+    address,
+    city,
+    occupation,
+    contactNumber,
+    // interestedInFIFP,
+  } = req.body;
   const profileData = {
     userId,
     name,
     dob,
     gender,
+    address,
+    city,
+    occupation,
     contactNumber,
-    interestedInFhir,
+    // interestedInFIFP,
   };
 
   userService
@@ -79,6 +91,7 @@ exports.getAll = (req, res) => {
       });
     })
     .catch((error) => {
+      console.log(error);
       res.status(500).json({
         statusCode: "1",
         message: "Failed to retrieve userProfile data",

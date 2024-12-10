@@ -102,7 +102,7 @@ exports.checkSession = (req, res) => {
 
 // Refresh Token
 exports.refreshToken = (req, res) => {
- //#swagger.tags = ['Login-User']
+  //#swagger.tags = ['Login-User']
   const { token } = req.body;
 
   if (!token) {

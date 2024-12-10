@@ -21,14 +21,26 @@ const ProfileSchema = new mongoose.Schema({
         enum: ['male', 'female', 'other'],
         required: false,
     },
+    address:{
+        type:String,
+        required:false,
+    },
+    city:{
+        type:String,
+        required:false,
+    },
+    occupation:{
+        type:String,
+        required:false,
+    },
     contactNumber: {
         type: String,
         required: false,
     },
-    interestedInFhir: {
-        type: Boolean,
-        required: false,
-    },
+    // interestedInFIFP: {
+    //     type: Boolean,
+    //     required: false,
+    // },
 }, {
     timestamps: true 
 });
