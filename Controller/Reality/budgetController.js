@@ -1,7 +1,7 @@
 const budgetService = require("../../Service/Reality/budgetService");
 
 exports.createIncome = (req, res) => {
-  //#swagger.tags = ['Reality-Expenses']
+  //#swagger.tags = ['Reality-budgetIncome']
   const { month, year, income, otherIncome = [], userId } = req.body;
 
   if (!month || !year || !income || !userId) {
@@ -39,7 +39,7 @@ exports.createIncome = (req, res) => {
 };
 
 exports.updateIncome = (req, res) => {
- //#swagger.tags = ['Reality-Expenses']
+ //#swagger.tags = ['Reality-budgetIncome']
   const { budgetId } = req.params;
   const budgetData = req.body;
 
@@ -63,7 +63,7 @@ exports.updateIncome = (req, res) => {
 };
 
 exports.getIncomeById = (req, res) => {
-  //#swagger.tags = ['Reality-Expenses']
+ //#swagger.tags = ['Reality-budgetIncome']
   const { budgetId } = req.params;
 
   if (!budgetId) {
@@ -93,7 +93,7 @@ exports.getIncomeById = (req, res) => {
 };
 
 exports.viewIncome = (req, res) => {
- //#swagger.tags = ['Reality-Expenses']
+ //#swagger.tags = ['Reality-budgetIncome']
   const { month, year, userId } = req.query;
 
   if (!month || !year || !userId) {
@@ -122,7 +122,7 @@ exports.viewIncome = (req, res) => {
     });
 };
 exports.deleteIncome = (req, res) => {
-  //#swagger.tags = ['Reality-Expenses']
+  //#swagger.tags = ['Reality-budgetIncome']
   const { budgetId } = req.params;
 
   if (!budgetId) {

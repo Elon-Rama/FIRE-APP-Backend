@@ -1876,7 +1876,7 @@
     "/api/realitybudget/create": {
       "post": {
         "tags": [
-          "Reality-Expenses"
+          "Reality-budgetIncome"
         ],
         "description": "",
         "parameters": [
@@ -1929,7 +1929,7 @@
     "/api/realitybudget/getbyid/{budgetId}": {
       "get": {
         "tags": [
-          "Reality-Expenses"
+          "Reality-budgetIncome"
         ],
         "description": "",
         "parameters": [
@@ -1964,7 +1964,7 @@
     "/api/realitybudget/update/{budgetId}": {
       "put": {
         "tags": [
-          "Reality-Expenses"
+          "Reality-budgetIncome"
         ],
         "description": "",
         "parameters": [
@@ -1996,7 +1996,7 @@
     "/api/realitybudget/delete/{budgetId}": {
       "delete": {
         "tags": [
-          "Reality-Expenses"
+          "Reality-budgetIncome"
         ],
         "description": "",
         "parameters": [
@@ -2031,7 +2031,7 @@
     "/api/realitybudget/view": {
       "get": {
         "tags": [
-          "Reality-Expenses"
+          "Reality-budgetIncome"
         ],
         "description": "",
         "parameters": [
@@ -2068,80 +2068,6 @@
           },
           "500": {
             "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/realityExpenses/expenses": {
-      "post": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/realityExpenses/getAllExpenses": {
-      "get": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/realityExpenses/getExpense/{id}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/realityExpenses/updateExpense/{id}": {
-      "put": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      }
-    },
-    "/api/realityExpenses/deleteExpense/{id}": {
-      "delete": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
           }
         }
       }
