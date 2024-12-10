@@ -14,6 +14,7 @@ const insuranceRoute = require("./Router/insuranceRoute");
 const debtRoute = require("./Router/debtRoute");
 const financialRoute = require("./Router/financialRoute");
 const riskRoute = require("./Router/riskRoute");
+const expensesRoute = require("./Router/expensesRoute");
 
 api.use("/user", emailRoute);
 api.use("/profile", userRoute);
@@ -28,5 +29,6 @@ api.use("/debt", debtRoute);
 api.use("/health", financialRoute);
 api.use("/risk", riskRoute);
 api.use("/realitybudget", realityBudgetRoute);
+api.use('/realityExpenses',expensesRoute);
 
 module.exports = api;
