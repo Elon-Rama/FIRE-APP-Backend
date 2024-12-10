@@ -1,13 +1,12 @@
-const budgetDao = require("../../Dao/ExpensesAllocation/budgetDao");
+const budgetDao = require("../../Dao/Reality/budgetDao");
 const UserDAO = require("../../Dao/Login/emailDao");
-const ExpensesAllocation = require("../../Models/ExpensesAllocation/allocationModel");
 
-exports.create = (budgetData) => {
+exports.createIncome = (budgetData) => {
   return new Promise(async (resolve, reject) => {
     try {
       const { month, year, userId, income, otherIncome = [] } = budgetData;
 
-      const user = await UserDAO.findUserById(data.userId);
+      const user = await UserDAO.findUserById(userId);
       if (!user) {
         return reject({ error: "User not found" });
       }
@@ -50,15 +49,32 @@ exports.create = (budgetData) => {
   });
 };
 
-exports.updateBudget = (id, budgetData) => {
+exports.updateIncome = (budgetId, budgetData) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const existingBudget = await budgetDao.getBudgetById(id);
+      const existingBudget = await budgetDao.getBudgetById(budgetId);
       if (!existingBudget) {
         return reject(new Error("Budget not found"));
       }
 
-      const updatedBudget = await budgetDao.updateBudget(id, budgetData);
+      const income = Number(budgetData.income || 0);
+      const otherIncome = Array.isArray(budgetData.otherIncome)
+        ? budgetData.otherIncome.map(Number)
+        : [];
+
+      const totalOtherIncome = otherIncome.reduce((acc, curr) => acc + curr, 0);
+      const totalIncome = income + totalOtherIncome;
+
+      const updatedBudgetData = {
+        ...budgetData,
+        totalIncome,
+      };
+
+      const updatedBudget = await budgetDao.updateBudget(
+        budgetId,
+        updatedBudgetData
+      );
+
       if (budgetData.propagate) {
         await budgetDao.propagateFutureMonths(updatedBudget);
       }
@@ -70,23 +86,7 @@ exports.updateBudget = (id, budgetData) => {
   });
 };
 
-exports.deleteBudget = (id) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const existingBudget = await budgetDao.getBudgetById(id);
-      if (!existingBudget) {
-        return reject(new Error("Budget not found"));
-      }
-
-      await budgetDao.deleteBudget(id);
-      resolve({ message: "Budget deleted successfully" });
-    } catch (error) {
-      reject(new Error("Failed to delete budget: " + error.message));
-    }
-  });
-};
-
-exports.getBudgetById = (budgetId) => {
+exports.getIncomeById = (budgetId) => {
   return new Promise(async (resolve, reject) => {
     try {
       const budget = await budgetDao.getBudgetById(budgetId);
@@ -101,7 +101,7 @@ exports.getBudgetById = (budgetId) => {
   });
 };
 
-exports.View = ({ month, year, userId }) => {
+exports.viewIncome = ({ month, year, userId }) => {
   return new Promise(async (resolve, reject) => {
     try {
       const budget = await budgetDao.getBudgetByMonthAndYear(
@@ -123,26 +123,17 @@ exports.View = ({ month, year, userId }) => {
   });
 };
 
-exports.calculateBudget = (month, year, userId) => {
+exports.deleteIncome = (budgetId) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const budget = await budgetDao.getBudgetByMonthAndYear(userId, month, year);
-      if (!budget) {
-        return reject(new Error("No budget found for the selected month and year"));
+      const deletedBudget = await budgetDao.deleteBudget(budgetId);
+      if (!deletedBudget) {
+        return reject(new Error("Budget not found"));
       }
 
-      const expensesAllocation = await ExpensesAllocation.getExpensesAllocation(userId, month, year);
-      if (!expensesAllocation) {
-        return reject(new Error("No expenses allocation found for the selected month and year"));
-      }
-
-      const totalIncome = budget.totalIncome;
-      const totalExpenses = expensesAllocation.totalExpenses;
-      const remainingBalance = totalIncome - totalExpenses;
-
-      resolve({ totalIncome, totalExpenses, remainingBalance });
+      resolve({ message: "Budget deleted successfully" });
     } catch (error) {
-      reject(new Error("Failed to calculate budget: " + error.message));
+      reject(new Error("Failed to delete budget: " + error.message));
     }
   });
 };

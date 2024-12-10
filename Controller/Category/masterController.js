@@ -1,57 +1,74 @@
-const expensesService = require("../../Service/Category/masterService");
+const masterService = require("../../Service/Category/masterService");
 
-exports.upsert = async (req, res) => {
+exports.upsertExpense = (req, res) => {
+  //#swagger.tags=['Master-Expenses']
+  const { userId, title, masterId } = req.body;
+  if ((!userId, !title)) {
+    return res.status(200).json({ error: "All fields are required" });
+  }
+  const expensesMaster = {
+    userId,
+    title,
+    masterId,
+  };
+  masterService
+    .upsertExpense(expensesMaster)
+    .then((response) => {
+      res.status(201).json(response);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({ error: "Internal server error" });
+    });
+};
+
+exports.getAllExpenses = (req, res) => {
   //#swagger.tags = ['Master-Expenses']
-  const { userId, title, id } = req.body;
-  try {
-    const result = await expensesService.upsertExpense(userId, title, id);
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(500).json({ statusCode: "1", message: error.message });
-  }
-};
-
-exports.getAll = async (req, res) => {
-   //#swagger.tags = ['Master-Expenses']
   const { userId } = req.query;
-  try {
-    const result = await expensesService.getAllExpenses(userId);
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(500).json({ statusCode: "1", message: error.message });
+  if (!userId) {
+    return res.status(200).json({ message: "All fields are required" });
   }
+  masterService
+    .getAllExpenses(userId)
+    .then((response) => {
+      res.status(201).json(response);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({ message: "Internal Server error" });
+    });
 };
 
-exports.getById = async (req, res) => {
-   //#swagger.tags = ['Master-Expenses']
-  try {
-    const result = await expensesService.getExpenseById(req.params.expenses_id);
-    res.status(200).json(result);
-  } catch (error) {
-    res
-      .status(500)
-      .json({
-        statusCode: "1",
-        message: "Failed to retrieve expense data",
-        error: error.message,
-      });
+exports.getExpenseById = (req, res) => {
+  //#swagger.tags=['Emergency-Fund']
+  const { masterId } = req.params;
+  if (!masterId) {
+    return res.status(200).json({ error: "masterId is required" });
   }
+  masterService
+    .getExpenseById(masterId)
+    .then((response) => {
+      res.status(200).json(response);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json(error);
+    });
 };
 
-exports.deleteById = async (req, res) => {
-   //#swagger.tags = ['Master-Expenses']
-  try {
-    const result = await expensesService.toggleExpenseStatus(
-      req.params.expenses_id
-    );
-    res.status(200).json(result);
-  } catch (error) {
-    res
-      .status(500)
-      .json({
-        statusCode: "1",
-        message: "Failed to update expense status",
-        error: error.message,
-      });
+exports.deleteById = (req, res) => {
+  //#swagger.tags=['Emergency-Fund']
+  const { masterId } = req.params;
+  if (!masterId) {
+    return res.status(200).json({ error: "masterId is required" });
   }
+  masterService
+    .deleteById(masterId)
+    .then((response) => {
+      res.status(200).json(response);
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json(error);
+    });
 };
