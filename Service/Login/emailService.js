@@ -228,7 +228,7 @@ const createDefaultExpenses = async (userId) => {
     ];
     
     const currentMonth = new Date().getMonth(); // Returns 0-11 (January = 0)
-    // const monthName = monthNames[currentMonth]
+    const monthName = monthNames[currentMonth]
     const currentYear = new Date().getFullYear();
 
     const expensesTitles = createdMasterExpenses.map((expense) => ({
@@ -240,7 +240,7 @@ const createDefaultExpenses = async (userId) => {
 
     const newExpensesAllocation = new ExpensesAllocation({
       userId,
-      month: currentMonth,
+      month: monthName,
       year: currentYear,
       titles: expensesTitles,
     });
