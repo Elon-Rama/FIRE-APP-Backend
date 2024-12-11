@@ -40,7 +40,7 @@ exports.getAllExpenses = (req, res) => {
 };
 
 exports.getExpenseById = (req, res) => {
-  //#swagger.tags=['Emergency-Fund']
+   //#swagger.tags=['Master-Expenses']
   const { masterId } = req.params;
   if (!masterId) {
     return res.status(200).json({ error: "masterId is required" });
@@ -57,7 +57,7 @@ exports.getExpenseById = (req, res) => {
 };
 
 exports.deleteById = (req, res) => {
-  //#swagger.tags=['Emergency-Fund']
+   //#swagger.tags=['Master-Expenses']
   const { masterId } = req.params;
   if (!masterId) {
     return res.status(200).json({ error: "masterId is required" });

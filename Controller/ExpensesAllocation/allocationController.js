@@ -1,164 +1,112 @@
 const allocationService = require("../../Service/ExpensesAllocation/allocationService");
 
-exports.upsert = async (req, res) => {
-  //#swagger.tags = ['Expenses-Allocation']
+exports.upsert = (req, res) => {
   const { userId, titles, month, year } = req.body;
-  if (!userId || !titles || !month || !year) {
-    return res.status(200).json({ error: "All fields are required" });
-  }
-  const result = await allocationService.upsertAllocation(
-    userId,
-    titles,
-    month,
-    year
-  );
-  allocationService
-    .upsert(result)
-    .then((response) => {
-      res.status(201).json(response);
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).json({ error: "Internal server Error" });
+  return allocationService
+    .upsertAllocation(userId, titles, month, year)
+    .then((result) => res.status(201).json(result))
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({
+        statuscode: "1",
+        message: "Internal Server Error",
+      });
     });
 };
 
-exports.copyPreviousMonthData = async (req, res) => {
-  //#swagger.tags = ['Expenses-Allocation']
+exports.copyPreviousMonthData = (req, res) => {
   const { userId, month, year } = req.body;
-  if (!userId || !month || !year) {
-    return res.status(200).json({ error: "All fields are required" });
-  }
-  const result = await allocationService.copyPreviousMonthData(
-    userId,
-    month,
-    year
-  );
-  allocationService
-    .copyPreviousMonthData(result)
-    .then((response) => {
-      res.status(201).json(response);
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).json({ error: "Internal server Error" });
+  return allocationService
+    .copyPreviousMonthData(userId, month, year)
+    .then((response) => res.status(response.statusCode).json(response))
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({
+        statuscode: "1",
+        message: "Internal Server Error",
+      });
     });
 };
 
-exports.updateExpenseAmount = async (req, res) => {
-  //#swagger.tags = ['Expenses-Allocation']
+exports.updateExpenseAmount = (req, res) => {
   const { userId, entryId, amount } = req.body;
-  if (!userId || !entryId || !amount) {
-    return res.status(200).json({ error: "All fields are required" });
-  }
-  const result = await allocationService.updateExpenseAmount(
-    userId,
-    entryId,
-    amount
-  );
-  allocationService
-    .updateExpenseAmount(result)
-    .then((response) => {
-      res.status(201).json(response);
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).json({ error: "Internal server Error" });
+  return allocationService
+    .updateExpenseAmount(userId, entryId, amount)
+    .then((response) => res.status(response.statusCode).json(response))
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({
+        statusCode: "1",
+        message: "Internal Server Error",
+      });
     });
 };
 
-exports.postSubCategoryValues = async (req, res) => {
-  //#swagger.tags = ['Expenses-Allocation']
+exports.postSubCategoryValues = (req, res) => {
   const { userId, month, year, selectedMaster, selectedCategory, amount } =
     req.body;
-  if (
-    !userId ||
-    !month ||
-    !year ||
-    !selectedMaster ||
-    !selectedCategory ||
-    !amount
-  ) {
-    return res.status(200).json({ error: "All fields are required" });
-  }
-  const result = await allocationService.updateSubCategoryValues(
-    userId,
-    month,
-    year,
-    selectedMaster,
-    selectedCategory,
-    amount
-  );
-  allocationService
-    .updateSubCategoryValues(result)
-    .then((response) => {
-      res.status(201).json(response);
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).json({ error: "Internal server Error" });
+  return allocationService
+    .updateSubCategoryValues(
+      userId,
+      month,
+      year,
+      selectedMaster,
+      selectedCategory,
+      amount
+    )
+    .then((result) =>
+      res.status(result.statusCode === "0" ? 201 : 400).json(result)
+    )
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({
+        statusCode: "1",
+        message: "Internal Server Error",
+      });
     });
 };
 
 exports.getAll = (req, res) => {
-  //#swagger.tags = ['Expenses-Allocation']
   const { userId, month, year } = req.body;
-  if (!userId || !month || !year) {
-    return res.status(200).json({ error: "All fields are required" });
-  }
-
-  allocationService
+  return allocationService
     .getAllAllocations(userId, month, year)
-    .then((result) => {
-      return allocationService.getAll(result);
-    })
-    .then((response) => {
-      res.status(200).json(response);
-    })
+    .then((result) =>
+      res.status(result.statusCode === "0" ? 200 : 404).json(result)
+    )
     .catch((error) => {
       console.error(error);
-      res.status(500).json({ error: "Internal Server Error" });
+      res.status(500).json({
+        statusCode: "1",
+        message: "Internal Server Error",
+      });
     });
 };
 
 exports.getById = (req, res) => {
-  //#swagger.tags = ['Expenses-Allocation']
   const { userId, month, year } = req.params;
-
-  if (!userId || !month || !year) {
-    return res.status(400).json({ error: "All fields are required" });
-  }
-
-  allocationService
+  return allocationService
     .getAllocationById(userId, month, year)
-    .then((result) => {
-      res.status(200).json(result);
-    })
-    .catch((error) => {
-      console.error("Error fetching allocation by ID:", error);
-      res.status(500).json({ error: "Internal Server Error" });
+    .then((result) =>
+      res.status(result.statusCode === "0" ? 200 : 404).json(result)
+    )
+    .catch((err) => {
+      console.error(err);
+      res.status(500).json({
+        statusCode: "1",
+        message: "Internal Server Error",
+      });
     });
 };
 
 exports.delete = (req, res) => {
-  //#swagger.tags = ['Expenses-Allocation']
   const { allocationId } = req.params;
-
-  if (!allocationId) {
-    return res.status(400).json({ error: "Allocation ID is required" });
-  }
-
-  allocationService
+  return allocationService
     .deleteAllocation(allocationId)
-    .then((result) => {
-      if (result.statusCode === "0") {
-        res.status(200).json(result);
-      } else {
-        res.status(404).json({ error: "Allocation not found" });
-      }
-    })
-    .catch((error) => {
-      console.error("Error deleting allocation:", error);
+    .then((result) =>
+      res.status(result.statusCode === "0" ? 200 : 404).json(result)
+    )
+    .catch((err) => {
+      console.error(err);
       res.status(500).json({
         statusCode: "1",
         message: "Internal Server Error",

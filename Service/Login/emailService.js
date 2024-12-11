@@ -97,7 +97,7 @@ exports.verifyOTP = (email, otp) => {
       user.sessionExpiresAt = sessionExpiresAt;
       await user.save();
 
-      // Create default expenses if none exist
+      
       await createDefaultExpenses(user._id);
 
       // Optionally fetch the user profile
@@ -221,7 +221,14 @@ const createDefaultExpenses = async (userId) => {
 
     await ChildExpenses.insertMany(subcategoriesMapping);
 
-    const currentMonth = new Date().getMonth() + 1; // use number format
+    // const currentMonth = new Date().getMonth() + 1; // use number format
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    
+    const currentMonth = new Date().getMonth(); // Returns 0-11 (January = 0)
+    // const monthName = monthNames[currentMonth]
     const currentYear = new Date().getFullYear();
 
     const expensesTitles = createdMasterExpenses.map((expense) => ({
