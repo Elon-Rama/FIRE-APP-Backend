@@ -820,6 +820,9 @@
     },
     "/api/allocation/create": {
       "post": {
+        "tags": [
+          "Expenses-Allocation"
+        ],
         "description": "",
         "parameters": [
           {
@@ -850,6 +853,9 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "OK"
+          },
           "201": {
             "description": "Created"
           },
@@ -864,6 +870,9 @@
     },
     "/api/allocation/copyPreviousMonth": {
       "post": {
+        "tags": [
+          "Expenses-Allocation"
+        ],
         "description": "",
         "parameters": [
           {
@@ -891,6 +900,9 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "OK"
+          },
           "401": {
             "description": "Unauthorized"
           },
@@ -902,6 +914,9 @@
     },
     "/api/allocation/subcategorysaveupdate": {
       "post": {
+        "tags": [
+          "Expenses-Allocation"
+        ],
         "description": "",
         "parameters": [
           {
@@ -938,6 +953,9 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "OK"
+          },
           "201": {
             "description": "Created"
           },
@@ -955,6 +973,9 @@
     },
     "/api/allocation/delete/{allocationId}": {
       "delete": {
+        "tags": [
+          "Expenses-Allocation"
+        ],
         "description": "",
         "parameters": [
           {
@@ -987,6 +1008,9 @@
     },
     "/api/allocation/getAll": {
       "post": {
+        "tags": [
+          "Expenses-Allocation"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1031,6 +1055,9 @@
     },
     "/api/allocation/{userId}/{month}/{year}": {
       "get": {
+        "tags": [
+          "Expenses-Allocation"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1075,6 +1102,9 @@
     },
     "/api/allocation/edit": {
       "put": {
+        "tags": [
+          "Expenses-Allocation"
+        ],
         "description": "",
         "parameters": [
           {
@@ -1102,6 +1132,9 @@
           }
         ],
         "responses": {
+          "200": {
+            "description": "OK"
+          },
           "401": {
             "description": "Unauthorized"
           },
