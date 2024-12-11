@@ -122,7 +122,7 @@ exports.calculate = (fireId) => {
         status: 201,
         data: {
           success: true,
-          message: "Retirement calculation successful and data saved",
+          message: "Retirement calculation successfully",
           data: formattedResults,
         },
       });

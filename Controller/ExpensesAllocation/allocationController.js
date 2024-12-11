@@ -1,8 +1,12 @@
 const allocationService = require("../../Service/ExpensesAllocation/allocationService");
 
 exports.upsert = (req, res) => {
+  //#swagger.tags = ['Expenses-Allocation']
   const { userId, titles, month, year } = req.body;
-  return allocationService
+  if ((!userId, !month, !year, !titles)) {
+    return res.status(200).json({ error: "All fields are Required" });
+  }
+  allocationService
     .upsertAllocation(userId, titles, month, year)
     .then((result) => res.status(201).json(result))
     .catch((err) => {
@@ -15,8 +19,12 @@ exports.upsert = (req, res) => {
 };
 
 exports.copyPreviousMonthData = (req, res) => {
+  //#swagger.tags = ['Expenses-Allocation']
   const { userId, month, year } = req.body;
-  return allocationService
+  if ((!userId, !month, !year)) {
+    return res.status(200).json({ error: "All fields are Required" });
+  }
+  allocationService
     .copyPreviousMonthData(userId, month, year)
     .then((response) => res.status(response.statusCode).json(response))
     .catch((err) => {
@@ -29,7 +37,11 @@ exports.copyPreviousMonthData = (req, res) => {
 };
 
 exports.updateExpenseAmount = (req, res) => {
+  //#swagger.tags = ['Expenses-Allocation']
   const { userId, entryId, amount } = req.body;
+  if ((!userId, !entryId, !amount)) {
+    return res.status(200).json({ error: "All fields are required" });
+  }
   return allocationService
     .updateExpenseAmount(userId, entryId, amount)
     .then((response) => res.status(response.statusCode).json(response))
@@ -43,9 +55,13 @@ exports.updateExpenseAmount = (req, res) => {
 };
 
 exports.postSubCategoryValues = (req, res) => {
+  //#swagger.tags = ['Expenses-Allocation']
   const { userId, month, year, selectedMaster, selectedCategory, amount } =
     req.body;
-  return allocationService
+  if ((!userId, !month, !year, !selectedMaster, !selectedCategory, !amount)) {
+    return res.status(200).json({ error: "All fields are required" });
+  }
+  allocationService
     .updateSubCategoryValues(
       userId,
       month,
@@ -67,8 +83,12 @@ exports.postSubCategoryValues = (req, res) => {
 };
 
 exports.getAll = (req, res) => {
+  //#swagger.tags = ['Expenses-Allocation']
   const { userId, month, year } = req.body;
-  return allocationService
+  if ((!userId, !month, !year)) {
+    return res.status(200).json({ error: "All fields are Required" });
+  }
+  allocationService
     .getAllAllocations(userId, month, year)
     .then((result) =>
       res.status(result.statusCode === "0" ? 200 : 404).json(result)
@@ -83,8 +103,12 @@ exports.getAll = (req, res) => {
 };
 
 exports.getById = (req, res) => {
+  //#swagger.tags = ['Expenses-Allocation']
   const { userId, month, year } = req.params;
-  return allocationService
+  if ((!userId, !month, !year)) {
+    return res.status(200).json({ error: "All fields are Required" });
+  }
+  allocationService
     .getAllocationById(userId, month, year)
     .then((result) =>
       res.status(result.statusCode === "0" ? 200 : 404).json(result)
@@ -99,8 +123,12 @@ exports.getById = (req, res) => {
 };
 
 exports.delete = (req, res) => {
+  //#swagger.tags = ['Expenses-Allocation']
   const { allocationId } = req.params;
-  return allocationService
+  if (!allocationId) {
+    return res.status(200).json({ error: "allocationId is required" });
+  }
+  allocationService
     .deleteAllocation(allocationId)
     .then((result) =>
       res.status(result.statusCode === "0" ? 200 : 404).json(result)
