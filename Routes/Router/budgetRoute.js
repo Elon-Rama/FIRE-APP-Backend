@@ -3,7 +3,7 @@ const router = express.Router();
 const { verifyToken } = require("../../Middleware/authMiddleware");
 const Budget = require("../../Controller/ExpensesAllocation/budgetController");
 
-router.post("/create",verifyToken, Budget.create);
+router.post("/create", verifyToken, Budget.create);
 router.get("/getById/:budgetId", verifyToken, Budget.getById);
 router.get('/view', verifyToken,Budget.view);
 router.put("/update/:budgetId", verifyToken, Budget.update);

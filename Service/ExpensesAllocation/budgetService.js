@@ -7,7 +7,7 @@ exports.create = (budgetData) => {
     try {
       const { month, year, userId, income, otherIncome = [] } = budgetData;
 
-      const user = await UserDAO.findUserById(data.userId);
+      const user = await UserDAO.findUserById(userId);
       if (!user) {
         return reject({ error: "User not found" });
       }
