@@ -2,7 +2,7 @@ const express = require("express");
 const api = express.Router();
 
 const emailRoute = require("./Router/emailRoute");
-// const googleRoute = require('./Router/googleRoute');
+const googleRoute = require('./Router/googleRoute');
 const userRoute = require("./Router/userRoute");
 const fireRoute = require("./Router/fireRoute");
 const masterRoute = require("./Router/masterRoute");
@@ -18,7 +18,7 @@ const riskRoute = require("./Router/riskRoute");
 const expensesRoute = require("./Router/expensesRoute");
 
 api.use("/user", emailRoute);
-// api.use('/google',googleRoute);
+api.use('/google',googleRoute);
 api.use("/profile", userRoute);
 api.use("/fire", fireRoute);
 api.use("/master", masterRoute);

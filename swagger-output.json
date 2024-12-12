@@ -225,6 +225,65 @@
         }
       }
     },
+    "/api/google/login/success": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/google/login/failed": {
+      "get": {
+        "description": "",
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/google/google": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/google/google/callback": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/google/logout": {
+      "get": {
+        "description": "",
+        "responses": {
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/api/profile/create": {
       "post": {
         "tags": [
@@ -409,15 +468,10 @@
     "/api/fire/create": {
       "post": {
         "tags": [
-          "Questionpage"
+          "Fire-QuestionPage"
         ],
         "description": "",
         "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
           {
             "name": "body",
             "in": "body",
@@ -465,9 +519,6 @@
           "201": {
             "description": "Created"
           },
-          "401": {
-            "description": "Unauthorized"
-          },
           "500": {
             "description": "Internal Server Error"
           }
@@ -477,7 +528,7 @@
     "/api/fire/calculate/{fireId}": {
       "get": {
         "tags": [
-          "Questionpage"
+          "Fire-QuestionPage"
         ],
         "description": "",
         "parameters": [
@@ -485,11 +536,6 @@
             "name": "fireId",
             "in": "path",
             "required": true,
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
             "type": "string"
           }
         ],
@@ -499,9 +545,6 @@
           },
           "400": {
             "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
           },
           "500": {
             "description": "Internal Server Error"
@@ -1220,8 +1263,8 @@
           "200": {
             "description": "OK"
           },
-          "400": {
-            "description": "Bad Request"
+          "201": {
+            "description": "Created"
           },
           "401": {
             "description": "Unauthorized"
@@ -1264,8 +1307,8 @@
           "200": {
             "description": "OK"
           },
-          "400": {
-            "description": "Bad Request"
+          "201": {
+            "description": "Created"
           },
           "401": {
             "description": "Unauthorized"
@@ -1296,8 +1339,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
+          "201": {
+            "description": "Created"
           },
           "401": {
             "description": "Unauthorized"
@@ -1331,8 +1374,8 @@
           "200": {
             "description": "OK"
           },
-          "400": {
-            "description": "Bad Request"
+          "201": {
+            "description": "Created"
           },
           "401": {
             "description": "Unauthorized"
@@ -1375,8 +1418,8 @@
           "200": {
             "description": "OK"
           },
-          "400": {
-            "description": "Bad Request"
+          "201": {
+            "description": "Created"
           },
           "401": {
             "description": "Unauthorized"

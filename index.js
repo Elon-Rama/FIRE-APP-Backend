@@ -6,7 +6,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const mongodb = require("./Mongo/DB");
 require("dotenv").config();
-
+require('./config/passport/google');
+// const passport = require("passport");
 const route = require('./Routes/route');
 
 // Swagger setup
@@ -17,6 +18,8 @@ const swaggerUi = require("swagger-ui-express");
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 app.use(
     session({
@@ -26,6 +29,17 @@ app.use(
         cookie: { secure: false }, 
     })
 );
+// // Middleware
+// app.use(
+//     session({
+//         secret: process.env.SESSION_SECRET || 'yoursecret',
+//         resave: false,
+//         saveUninitialized: true,
+//         cookie: { secure: false }, 
+//     })
+// );
+
+
 
 // Routes
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -33,8 +47,8 @@ app.use('/api',route)
 
 // MongoDB Connection
 mongoose
-    .connect(process.env.Mongo, { useNewUrlParser: true, useUnifiedTopology: true })
-    // .connect(mongodb.url, { useNewUrlParser: true, useUnifiedTopology: true })
+    // .connect(process.env.Mongo, { useNewUrlParser: true, useUnifiedTopology: true })
+    .connect(mongodb.url, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log("MongoDB connected!");
     })

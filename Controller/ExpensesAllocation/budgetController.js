@@ -24,8 +24,8 @@ exports.create = (req, res) => {
     .then((response) => {
       res.status(201).json({
         success: true,
-        message: "Budget created successfully",
-        data: response,
+        message: "Budget-plan income created successfully",
+        budget: response,
       });
     })
     .catch((error) => {
@@ -46,10 +46,10 @@ exports.update = (req, res) => {
   budgetService
     .updateBudget(budgetId, budgetData)
     .then((updatedBudget) => {
-      res.status(200).json({
+      res.status(201).json({
         success: true,
         message: "Budget updated successfully",
-        data: updatedBudget,
+        budget: updatedBudget,
       });
     })
     .catch((error) => {
@@ -67,7 +67,7 @@ exports.getById = (req, res) => {
   const { budgetId } = req.params;
 
   if (!budgetId) {
-    return res.status(400).json({
+    return res.status(200).json({
       success: false,
       message: "BudgetId is required",
     });
@@ -76,10 +76,10 @@ exports.getById = (req, res) => {
   budgetService
     .getBudgetById(budgetId)
     .then((response) => {
-      res.status(200).json({
+      res.status(201).json({
         success: true,
         message: "Budget retrieved successfully",
-        data: response,
+        budget: response,
       });
     })
     .catch((error) => {
@@ -97,7 +97,7 @@ exports.view = (req, res) => {
   const { month, year, userId } = req.query;
 
   if (!month || !year || !userId) {
-    return res.status(400).json({
+    return res.status(200).json({
       success: false,
       message: "Month, Year, and UserId are required",
     });
@@ -106,10 +106,10 @@ exports.view = (req, res) => {
   budgetService
     .View({ month, year, userId })
     .then((response) => {
-      res.status(200).json({
+      res.status(201).json({
         success: true,
         message: "Budget retrieved successfully",
-        data: response,
+        budget: response,
       });
     })
     .catch((error) => {
@@ -126,7 +126,7 @@ exports.delete = (req, res) => {
   const { budgetId } = req.params;
 
   if (!budgetId) {
-    return res.status(400).json({
+    return res.status(200).json({
       success: false,
       message: "BudgetId is required",
     });
@@ -135,7 +135,7 @@ exports.delete = (req, res) => {
   budgetService
     .deleteBudget(budgetId)
     .then((response) => {
-      res.status(200).json({
+      res.status(201).json({
         success: true,
         message: response.message,
       });
@@ -155,7 +155,7 @@ exports.calculateBudget = (req, res) => {
   const { month, year, userId } = req.query;
 
   if (!month || !year || !userId) {
-    return res.status(400).json({
+    return res.status(200).json({
       success: false,
       message: "Month, Year, and UserId are required",
     });
@@ -164,10 +164,10 @@ exports.calculateBudget = (req, res) => {
   budgetService
     .calculateBudget(month, year, userId)
     .then((budgetCalculation) => {
-      res.status(200).json({
+      res.status(201).json({
         success: true,
         message: "Budget calculated successfully",
-        data: budgetCalculation,
+        budget: budgetCalculation,
       });
     })
     .catch((error) => {
