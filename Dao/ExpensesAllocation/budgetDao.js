@@ -9,6 +9,10 @@ exports.getBudgetById = async (id) => {
   return await Budget.findById(id);
 };
 
+exports.deleteBudget = async(id) => {
+  return await Budget.findByIdAndDelete(id);
+};
+
 exports.getBudgetByMonthAndYear = async (userId, month, year) => {
   return await Budget.findOne({ userId, month, year });
 };

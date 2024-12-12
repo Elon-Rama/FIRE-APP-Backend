@@ -1,11 +1,10 @@
 const fireService = require("../../Service/FireQuestion/fireService");
 
 exports.Create = async (req, res) => {
-  //#swagger.tags = ['Questionpage']
+  //#swagger.tags = ['Fire-QuestionPage']
   const {
     userId,
-    // occupation,
-    // city,
+    
     age,
     retireage,
     expense,
@@ -19,8 +18,7 @@ exports.Create = async (req, res) => {
 
   if (
     !userId ||
-    // !occupation ||
-    // !city ||
+   
     !age ||
     !retireage ||
     !expense ||
@@ -39,8 +37,7 @@ exports.Create = async (req, res) => {
 
   const data = {
     userId,
-    // occupation,
-    // city,
+    
     age,
     retireage,
     expense,
@@ -67,7 +64,7 @@ exports.Create = async (req, res) => {
 };
 
 exports.Calculate = (req, res) => {
-  //#swagger.tags = ['Questionpage']
+  //#swagger.tags = ['Fire-QuestionPage']
   const { fireId } = req.params;
 
   if (!fireId) {
